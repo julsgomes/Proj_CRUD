@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio - Login</title>
+</head>
+<body>
+
+    <form>
+        <div>
+            <label>Faça login para continuar</label>
+        </div>
+
+        <div>
+            <input type="email" name="email" placeholder="Usuário" />
+        </div>
+
+        <div>
+            <input type="password" name="password" placeholder="Senha"/>
+        </div>
+
+        <button type="button">Logar</button>
+        <button type="button" id="but" onclick="clicar()">Criar Conta</button>
+    </form>
+
+
+
+    <script>
+        function clicar(){
+            window.location.href = "http://127.0.0.1:5000/Create"
+        }
+    </script>
+
+</body>
+
+<style>
+    form{
+        background: rgb(46, 46, 46);
+        text-align: center;
+        position: absolute;
+        margin: 200px 450px;
+        padding: 100px;             < !-- altura -- >
+        width: 300px;               < !-- grossura -- >
+    }
+
+    body{
+        background-image: url(https://media.istockphoto.com/id/522489711/pt/foto/de-fundo-azul-e-branco-tons.jpg?s=612x612&w=0&k=20&c=e7NWtbXpDldjcWkktCxQ6-Fa7Xdr_A35szvAdTvWvlU=);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    input{
+        background: white;
+        margin: 5px 50px 10px;
+        width: 300px;
+        padding: 7px;
+
+    }
+
+   input::placeholder{
+        color: black;
+   }
+
+   label{
+        color: white;
+        margin: 10px 100px;
+   }
+
+   button{
+        padding: 8px;
+   }
+</style>
+
+</html>
