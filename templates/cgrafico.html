@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento Financeiro - MeuSite</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='grafico.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="background-image">
+    <header>
+        <div id="div1H"></div>
+        <nav>
+            <div class="botoes-navbar">
+                <a href="{{ url_for('usuarios', nome_usuario=nome) }}">Início</a>
+                <a href="{{ url_for('sobre_nos') }}">Sobre nós</a>
+                <a href="{{ url_for('sobre_nos') }}#contato">Contato</a>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="form-container">
+            <form id="financeiroForm">
+                <input type="text" name="cpf" placeholder="Digite seu CPF">
+                <input type="number" name="salario" placeholder="Digite seu salário">
+                <input type="number" name="gasto" placeholder="Digite o gasto">
+                <button type="button" onclick="redirecionar();">Entrar</button>
+            </form>
+            <button id="openModalDiv1">Abrir Modal</button>
+            <dialog id="dialog1">
+                <p>Conteúdo do modal</p>
+                <button onclick="document.getElementById('dialog1').close()">Fechar</button>
+            </dialog>
+        </div>
+        <div class="graph-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='grafico.js') }}"></script>
+</body>
+</html>

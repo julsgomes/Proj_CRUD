@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Homepage</title>
+  <link href="https://fonts.cdnfonts.com/css/matrix" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='homepage.css') }}">
+</head>
+<body>
+  <img src="{{ url_for('static', filename='Imagens/Matrix.jpg') }}" alt="Background" id="background-image" />
+  <form>
+    <div id="div1">
+      <h1>Sistema de Gerenciamento de Finanças</h1>
+    </div>
+    <div id="div2">
+      <p>
+        É uma ferramenta projetada para ajudar indivíduos a controlar suas
+        finanças de maneira eficiente. Nesse sentido, ele oferece recursos
+        para monitorar e gerenciar suas despesas e contas a pagar.
+      </p>
+    </div>
+    <div class="integrantes">
+      <h1>Integrantes:</h1>
+      <p>Caio Henrique Ferreira Pereira</p>
+      <p>Julia Roberta Gomes Miguel</p>
+      <p>Mikael Vieira Magalhães</p>
+      <p>Rafael Oliveira Couto</p>
+    </div>
+  </form>
+  <div class="botoes">
+    <button type="button" id="butL" onclick="clicarLogar()">Logar</button>
+    <button type="button" id="butR" onclick="clicarRegistrar()">
+      Criar Conta
+    </button>
+  </div>
+  <script>
+    function clicarLogar() {
+      window.location.href = "http://127.0.0.1:5000/Login";
+    }
+
+    function clicarRegistrar() {
+      window.location.href = "http://127.0.0.1:5000/Create";
+    }
+  </script>
+</body>
+</html>

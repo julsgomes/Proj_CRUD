@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciamento Financeiro - MeuSite</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap" rel="stylesheet">
@@ -14,13 +14,13 @@
         <div id="div1H"></div>
         <nav>
             <div class="botoes-navbar">
-                <a href="#inicio">Início</a>
-                <a href="http://127.0.0.1:5000/Login">Sobre nós</a>
-                <a href="mailto:rafael.couto@aluno.ufop.edu.br">Contato</a>
+                <a href="{{ url_for('usuarios', nome_usuario=nome) }}">Início</a>
+                <a href="{{ url_for('sobre_nos') }}">Sobre nós</a>
+                <a href="{{ url_for('sobre_nos') }}#contato">Contato</a>
             </div>
         </nav>
     </header>
-
+    
     <div class="main-container">
         <div class="gerenciamento-financeiro">
             <div class="box-frase">
@@ -29,23 +29,23 @@
         </div>
 
         <div class="flex-container3">
-            <a href="#linkParaFlexContainer">
+            <a href="{{ url_for('tabelas', nome_usuario=nome) }}">
                 <div class="flex-container">
                     <div class="imagem">
-                        <img class="img1" src="Imagens\table.png" alt="Imagem de fundo">
+                        <img class="img1" src="{{ url_for('static', filename='Imagens/tabela.png') }}" alt="Imagem de fundo">
                     </div>
                     <div class="background-name">
                         <h1 class="frase1">Faça sua tabela</h1>
                     </div>
                 </div>
             </a>
-            <a href="#linkParaFlexContainer2">
+            <a href="{{ url_for('graficos', nome_usuario=nome) }}">
                 <div class="flex-container2">
                     <div class="imagem">
-                        <img class="img2" src="Imagens\table.png" alt="Imagem de fundo">
+                        <img class="img2" src="{{ url_for('static', filename='Imagens/grafico.png') }}" alt="Imagem de fundo">
                     </div>
                     <div class="background-name">
-                        <h1 class="frase2">Exemplos de tabelas funcionais</h1>
+                        <h1 class="frase2">Faça seu gráfico</h1>
                     </div>
                 </div>
             </a>

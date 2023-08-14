@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciamento Financeiro - MeuSite</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='SobreNos.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap" rel="stylesheet">
+</head>
+
+<body class="background-image">
+  <header>
+    <div id="div1H"></div>
+    <nav>
+      <div class="botoes-navbar">
+        <header>
+          <div id="div1H"></div>
+          <nav>
+              <div class="botoes-navbar">
+                <a href="{{ url_for('usuarios', nome_usuario=nome) }}">Início</a>
+                <a href="{{ url_for('sobre_nos') }}">Sobre nós</a>
+                <a href="{{ url_for('sobre_nos') }}#contato">Contato</a>
+              </div>
+          </nav>
+      </header>
+      
+      </div>
+    </nav>
+  </header>
+
+  <div class="main-container">
+    <div class="Containter-sobre-nos">
+      <div class="Sobre-nos">
+        <h1>Sobre Nós</h1>
+        <p>Bem-vindo ao MatCash, sua solução completa e gratuita para gerenciamento de finanças pessoais e
+          empresariais!</p>
+        <p>Criado como parte de um projeto de banco de dados desenvolvido por quatro estudantes do curso de Sistemas de
+          Informação da Universidade Federal de Ouro Preto.
+           A MatCash, surgiu da necessidade de oferecer uma ferramenta
+          de controle financeiro eficaz, intuitiva e, acima de tudo, acessível a todos.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="Parte2">
+    <div class="Containter-sobre-nos">
+      <div class="Sobre-nos">
+        <div class="titulo">
+          <h2 class="titlefont-padding-paddingtop" id="Sobre nós">Nossa missão</h2>
+        </div>
+        <p>Nossa missão é simplificar o gerenciamento financeiro, tornando-o acessível a todos, independentemente de seu
+          conhecimento ou experiência em finanças.</p>
+        <p>Acreditamos que, com as ferramentas certas, qualquer pessoa pode alcançar suas metas financeiras.</p>
+      </div>
+
+      <hr> <!-- Linha horizontal adicionada para dividir as seções -->
+      
+      <div class="fale" id="contato"> <!-- Adicionado ID para referenciar esta seção -->
+        <section aria-labelledby="FaleConosco">
+          <div class="fale-conosco">
+            <h2 class="titlefont-padding-paddingtop" id="FaleConosco">Fale conosco</h2>
+          </div>
+          <div class="form-container">
+            <div id="form-title">
+            </div>
+            <form action="https://formsubmit.co/ajax/juliagomes1676@gmail.com" method="POST">
+              <div class="form-field">
+                <label class="form-section" for="nome">Nome:</label>
+                <input type="text" name="nome" id="nome" placeholder="Nome aqui" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-section" for="email">Email:</label>
+                <input type="email" name="email" id="email" placeholder="Email aqui" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-section" for="assunto">Assunto:</label>
+                <input class="form-assunto" type="assunto" name="assunto" id="assunto" placeholder="Assunto aqui"
+                  required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-section" for="mensagem">Mensagem:</label>
+                <textarea name="mensagem" id="mensagem" placeholder="Mensagem aqui" required></textarea>
+              </div>
+
+              <button class="prettyButton" type="send">Enviar</button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+    <footer>
+      <div class="footer-content">
+        <h3 class="footer-heading">Nos Encontre Também Em:</h3>
+        <div class="social-media">
+          <a href="https://api.whatsapp.com/send?phone=5537988110926" class="footer-link whatsapp" target="_blank"
+            title="WhatsApp">
+            <img src="Imagens\whatsapp.png" alt="WhatsApp" class="social-icon">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+          <a href="https://www.instagram.com/julsgomes/" class="footer-link instagram" target="_blank"
+            title="Instagram">
+            <img src="Imagens\instagram.png" alt="WhatsApp" class="social-icon">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="mailto:juliagomes1676@gmail.com?subject=Gostaria%20de%20fazer%20um%20or%C3%A7amento&&body=Estou%20Interessado%20em%20alguns%20de%20seus%20produtos"
+            class="footer-link email" title="Email">
+            <img src="Imagens\email.png" alt="WhatsApp" class="social-icon">
+            <i class="fa-regular fa-envelope"></i>
+          </a>
+        </div>
+        <div class="footer-copyright">
+          <p>&#169; 2023 Todos os direitos reservados</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='style.js') }}"></script>
+</body>
+
+</html>

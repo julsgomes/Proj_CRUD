@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento Financeiro - MeuSite</title>
+    <link rel="stylesheet" href="Ctabela.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap" rel="stylesheet">
+</head>
+<body class="background-image">
+    <header>
+        <div id="div1H"></div>
+        <nav>
+            <div class="botoes-navbar">
+                <a href="{{ url_for('usuarios', nome_usuario=nome) }}">Início</a>
+                <a href="{{ url_for('sobre_nos', nome_usuario=nome) }}">Sobre nós</a>
+                <a href="{{ url_for('sobre_nos', nome_usuario=nome) }}#contato">Contato</a>                
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="gerenciamento-financeiro">
+            <table class="table-contas">
+                <thead>
+                    <tr>
+                        <th>Conta</th>
+                        <th>Valor</th>
+                        <th>Data de Vencimento</th>
+                        <th>Status</th>
+                        <th></th> <!-- Coluna para botões de edição -->
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- As linhas da tabela serão inseridas dinamicamente aqui -->
+                </tbody>
+            </table>
+        </div>
+        <div class="flex-container3">
+            <a href="javascript:void(0)" class="addElementButton flex-container">
+                <div class="background-name">
+                    <h1 class="frase1">Adicionar elemento</h1>
+                </div>
+            </a>
+            <a href="javascript:void(0)" class="flex-container2">
+                <div class="background-name">
+                    <h1 class="frase2">Apagar elemento</h1>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function daysDiff(d1, d2) {
+    const oneDay = 24 * 60 * 60 * 1000;
+    return Math.round((d2 - d1) / oneDay);
+  }
+
+  function remove(result){
+    let nomeUsuario = window.location.pathname.split('/')[2];
+
+    fetch(`/usuario/${nomeUsuario}/deleta_conta`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tabela: result })
+    })
+  }
+
+  function formateDate(dataString) {
+    var data = new Date(dataString);
+    var ano = data.getFullYear();
+    var mes = ("0" + (data.getMonth() + 1)).slice(-2);  // +1 porque os meses em JavaScript são base 0
+    var dia = ("0" + data.getDate()).slice(-2);
+    var dataFormatada = ano + '-' + mes + '-' + dia;
+    return dataFormatada;
+  }
+
+
+  function showData(){
+    let nomeUsuario = window.location.pathname.split('/')[2];
+
+    fetch(`/usuario/${nomeUsuario}/mostrar_tabelas`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(results => {
+        let tableBody = document.getElementById('table-body');
+        
+        results.forEach(result => {
+
+            let newRow = tableBody.insertRow();
+            data = formateDate(result[3])
+            newRow.insertCell(0).innerHTML = result[1];
+            newRow.insertCell(1).innerHTML = result[2];
+            newRow.insertCell(2).innerHTML = data;
+        
+            let statusCheckbox = document.createElement('input');
+            statusCheckbox.type = 'checkbox';
+            statusCheckbox.onchange = function() {
+                if (statusCheckbox.checked) {
+                    newRow.className = 'pago';
+                } else {
+                    updateRowStatusBasedOnDate(newRow, data);
+                }
+            };
+        
+            let statusCell = newRow.insertCell(3);
+            statusCell.appendChild(statusCheckbox);
+        
+            // Adicionando a palavra "Pago" ao lado da caixa de seleção
+            let statusLabel = document.createElement('span');
+            statusLabel.textContent = " Pago";
+            statusCell.appendChild(statusLabel);
+        
+            // Define o status inicial baseado na data de vencimento
+            updateRowStatusBasedOnDate(newRow, data);
+        
+            let actionCell = newRow.insertCell(4);
+            let deleteButton = document.createElement('button');
+            deleteButton.innerHTML = 'Apagar';
+            deleteButton.onclick = function() { deleteRow(newRow, result); };
+            console.log(result[1])
+            actionCell.appendChild(deleteButton);
+        })
+        }) 
+  }
+  
+  function addElementToTable() {
+    let conta = prompt("Digite o nome da conta:");
+    if (conta === null) return;
+  
+    let valor = prompt("Digite o valor da conta:");
+    if (valor === null) return;
+  
+    let data = prompt("Digite a data de vencimento (aaaa-mm-dd):");
+    if (data === null) return;
+  
+    let tableBody = document.getElementById('table-body');
+    let newRow = tableBody.insertRow();
+    newRow.insertCell(0).innerHTML = conta;
+    newRow.insertCell(1).innerHTML = valor;
+    newRow.insertCell(2).innerHTML = data;
+  
+    let statusCheckbox = document.createElement('input');
+    statusCheckbox.type = 'checkbox';
+    statusCheckbox.onchange = function() {
+        if (statusCheckbox.checked) {
+            newRow.className = 'pago';
+        } else {
+            updateRowStatusBasedOnDate(newRow, data);
+        }
+    };
+  
+    let statusCell = newRow.insertCell(3);
+    statusCell.appendChild(statusCheckbox);
+  
+    // Adicionando a palavra "Pago" ao lado da caixa de seleção
+    let statusLabel = document.createElement('span');
+    statusLabel.textContent = " Pago";
+    statusCell.appendChild(statusLabel);
+  
+    // Define o status inicial baseado na data de vencimento
+    updateRowStatusBasedOnDate(newRow, data);
+
+    let nomeUsuario = window.location.pathname.split('/')[2];
+
+    const addTable = {
+        conta: conta,
+        valor: valor,
+        data_vencimento: data,
+        nome_usuario: nomeUsuario
+    };
+  
+    let actionCell = newRow.insertCell(4);
+    let deleteButton = document.createElement('button');
+    deleteButton.innerHTML = 'Apagar';
+    deleteButton.onclick = function() { 
+        console.log(addTable)
+        deleteRow(newRow, addTable); 
+    };
+    actionCell.appendChild(deleteButton);
+
+    fetch(`/usuario/${nomeUsuario}/salvar_tabela`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tabela: addTable })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // Exibir resposta do servidor no console
+        // Aqui você pode fazer alguma ação após o salvamento, se necessário
+    })
+    .catch(error => {
+        console.error('Erro ao salvar tabela:', error);
+    });
+  }
+
+  function updateRowStatusBasedOnDate(row, dueDateString) {
+    let currentDate = new Date();
+    let [day, month, year] = dueDateString.split("/");
+    let dueDate = new Date(year, month - 1, day);
+  
+    let daysDifference = daysDiff(currentDate, dueDate);
+    if (daysDifference < 0) {
+        row.className = 'atrasado';
+    } else if (daysDifference <= 3) {
+        row.className = 'alerta';
+    } else {
+        row.className = 'neutro';
+    }
+  }
+  
+  function deleteRow(row, result) {
+    row.parentElement.removeChild(row);
+    remove(result);
+  }
+  
+  // Adiciona o evento de click ao botão "Adicionar Elemento"
+  document.addEventListener('DOMContentLoaded', function() {
+    let addButton = document.querySelector(".addElementButton");
+    if (addButton) {
+        addButton.addEventListener('click', addElementToTable);
+    }
+    showData()
+  });
+  
+  // Usando JavaScript puro
+  window.addEventListener("load", function() {
+    document.body.classList.add("loaded");
+  });
+    </script>
+<style>
+    /* Estilos do corpo (body) */
+
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        color: #000;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    /* Estilos do cabeçalho (header) */
+
+    header {
+        width: 100%;
+        height: 40px;
+        background: #2D2D2D;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+    .background-image {
+        background-color: rgb(77, 77, 77);
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+
+    nav {
+        width: 100%;
+        height: 60px;
+        background: #2D2D2D;
+    }
+
+    nav a {
+        margin-right: 50px;
+        font-family: 'Inter', sans-serif;
+        text-decoration: none;
+        color: white;
+        font-size: 28px;
+        font-weight: 400;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    nav a:hover {
+        transform: scale(1.1);
+        color: #FFD700;
+        transition: all 0.3s ease;
+    }
+
+    div#div1H {
+        margin-top: 0px;
+        margin-left: 30px;
+        width: 90px;
+        height: 90px;
+        background: url("Imagens/Logo.png") center/cover;
+        border-radius: 500px;
+        position: absolute;
+    }
+
+    .botoes-navbar {
+        margin-top: 20px;
+        margin-left: 230px;
+    }
+
+    /* Estilos dos botões na página de início */
+
+    .box {
+        width: 100px;
+        height: 100px;
+        background: #fff;
+    }
+
+    .flex-container, .flex-container2 {
+        background-color:   #2D2D2D;
+        display: flex;
+        align-items: center;
+        margin-bottom: 50px;
+        margin-right: 50px;
+        width: 215px;
+        height: 50px;
+    }
+
+    .flex-container3 {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .frase1, .frase2 {
+        color: #ffffff;
+        font-size: 20px;
+        font-weight: 400;
+        margin-left: 30px;
+    }
+
+    .img1 {
+        width: 150px;
+        height: 150px;
+        margin-right: 40px;
+        margin-left: 31px;
+    }
+
+    .img2 {
+        width: 150px;
+        height: 150px;
+        margin-right: 15px;
+        margin-left: 31px;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .flex-container, .flex-container2 {
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .flex-container:hover, .flex-container2:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .flex-container:active, .flex-container2:active {
+        transform: scale(0.98);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Estilos da seção de gerenciamento financeiro */
+
+    .gerenciamento-financeiro {
+        background-color: #2D2D2D;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 80px;
+        margin-left: 20px;
+        margin-right: 100px;
+    }
+
+    .gratuito {
+        color: yellow;
+    }
+
+    .box-frase {
+        margin-top: 100px;
+        margin-bottom: 50px;
+        margin-right: 50px;
+    }
+
+    .main-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 700px;
+        height: 500px;
+        max-width: 1800px;
+        margin-top: 100px;
+        padding: 0 20px;
+    }
+
+    /* Estilos da tabela */
+.table-contas {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 18px;
+    text-align: left;
+}
+
+.table-contas thead tr {
+    background-color: #2D2D2D;
+    color: white;
+}
+
+.table-contas th, .table-contas td {
+    padding: 12px 15px;
+    border: 1px solid white;  /* Alteração aqui: definindo a borda como branca */
+}
+
+.table-contas tbody tr {
+    border-bottom: thin solid white;  /* Alteração aqui: definindo a borda inferior como branca */
+}
+
+.table-contas tbody tr:last-of-type {
+    border-bottom: 2px solid #2D2D2D;
+}
+
+.pago {
+    background-color: green;
+    color: white;
+}
+
+.atrasado {
+    background-color: red;
+    color: white;
+}
+
+.alerta {
+    background-color: yellow;
+}
+
+.neutro {
+    color: white;
+}
+
+/* Botões para editar */
+.edit-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+</style>
+</body>
+</html>

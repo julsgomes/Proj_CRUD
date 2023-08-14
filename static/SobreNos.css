@@ -1,0 +1,274 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  color: #000;
+}
+
+/* CABEÇALHO */
+
+header {
+  width: 100%;
+  height: 40px;
+  background: #2d2d2d;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1; /* Colocado z-index 1 para o cabeçalho ficar acima da imagem de fundo */
+}
+
+.background-image {
+  background-image: none; /* Remove a imagem de fundo da classe principal */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* z-index -1 para ficar atrás de outros elementos */
+}
+
+.background-image::before {
+  content: "";
+  position: fixed; /* Fixa o desfoque */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("Imagens/Frame 2.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(0); /* Começa sem desfoque */
+  transition: filter 1s ease; /* Transição suave de 1 segundo para a propriedade filter */
+  z-index: -2; /* z-index -2 para ficar atrás do efeito de sobreposição */
+}
+
+.background-image::after {
+  content: "";
+  position: fixed; /* Fixa a camada de sobreposição */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Camada semitransparente preta */
+  z-index: -1;
+  opacity: 0; /* Começa completamente transparente */
+  transition: opacity 1.5s ease; /* Transição suave de 1 segundo para a propriedade opacity */
+}
+
+.background-image.loaded::before {
+  filter: blur(8px); /* Aplica o desfoque após o carregamento */
+}
+
+.background-image.loaded::after {
+  opacity: 1; /* Aumenta a opacidade para fazer a camada aparecer gradualmente */
+}
+
+nav {
+  width: 100%;
+  height: 60px;
+  background: #2d2d2d;
+}
+
+nav a {
+  margin-right: 50px;
+  font-family: "Inter", sans-serif;
+  text-decoration: none;
+  color: white;
+  font-size: 28px;
+  font-weight: 400;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+nav a:hover {
+  transform: scale(1.1); /* Aumenta o tamanho do botão em 10% */
+  color: #ffd700; /* Muda a cor do texto para dourado */
+  transition: all 0.3s ease; /* Transição de 0.3s para todas as propriedades */
+}
+
+div#div1H {
+  margin-top: 0px;
+  margin-left: 30px;
+  width: 90px;
+  height: 90px;
+  background: url("Imagens/Logo.png") center/cover;
+  border-radius: 500px;
+  position: absolute;
+}
+
+.botoes-navbar {
+  margin-top: 20px;
+  margin-left: 230px;
+}
+
+.main-container {
+  margin-top: 110px;
+  width: 100%;
+  height: auto;
+  min-height: auto;
+}
+
+.Sobre-nos,
+.Equipe,
+.Contato {
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.Sobre-nos h1 {
+  font-size: 30px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.Sobre-nos p {
+  margin-right: 200px;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.Equipe h1 {
+  font-size: 30px;
+  color: #fff;
+  margin-left: 40px;
+  margin-bottom: 10px;
+}
+
+.Equipe p {
+  margin-right: 200px;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.Contato h1 {
+  font-size: 30px;
+}
+
+.Contato p {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.Parte2 {
+  margin-top: 60px;
+  width: 100%;
+  height: auto;
+  min-height: auto;
+}
+
+/*ESTILOS DO FORMULÁRIO DE CONTATO*/
+
+.fale {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fale-conosco {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.titlefont-padding-paddingtop {
+  font-size: 30px;
+  color: #fff;
+  margin-top: 50px;
+  margin-left: 0px;
+  margin-bottom: 10px;
+}
+
+.form-container {
+  background-color: rgba(46, 46, 46, 0.7);
+  margin-top: 40px;
+  width: 600px;
+  height: 400px;
+  margin-bottom: 50px;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.form-section {
+  color: #fff;
+}
+
+.form-field {
+  margin-bottom: 15px;
+}
+
+.form-field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #fff;
+  border-radius: 8px;
+}
+
+.prettyButton {
+  padding: 10px 20px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+footer {
+  background-color: #2d2d2d;
+  padding: 20px;
+  color: white;
+  text-align: center; /* Centraliza todo o conteúdo */
+}
+
+.footer-content {
+  padding: 0 15px; /* Adicionado para dar algum espaço interno */
+}
+
+.footer-heading {
+  margin-bottom: 10px;
+}
+
+.social-media {
+  display: flex;
+  justify-content: center; /* Centraliza os ícones das redes sociais */
+}
+
+.footer-link {
+  font-size: 24px;
+  color: white;
+  margin-right: 15px;
+  text-decoration: none; /* Remover sublinhado dos links */
+}
+
+.footer-copyright {
+  text-align: right; /* Alinha o texto de direitos autorais à esquerda */
+}
+
+.social-media img {
+  width: 20px;
+  height: 20px;
+  margin-right: 15px;
+  margin-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .footer-content {
+    flex-direction: column; /* Coloca os itens em uma coluna em telas menores */
+    align-items: flex-start; /* Alinha os itens à esquerda */
+  }
+  .footer-copyright {
+    margin-top: 15px; /* Adiciona espaço acima do texto de direitos autorais em telas menores */
+  }
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio - Login</title>
+    <style>
+        body {
+            background-color: white; /* Cor de fundo branca */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            background-image: linear-gradient(rgba(7, 7, 7, 0.7), rgba(7, 7, 7, 0.7)), url('Imagens/pngegg (3).png'); /* Sobreposição cinza com imagem de fundo */
+            background-size: cover; /* A imagem cobre toda a área do formulário */
+            text-align: center;
+            padding: 60px; /* Aumento do padding */
+            width: 400px; /* Aumento da largura */
+            box-shadow: 0px 4px 15px rgba(7, 7, 7, 0.7);
+            border-radius: 15px;
+        }
+
+        input {
+            background: white;
+            display: block;
+            margin: 10px auto;
+            width: 85%;
+            padding: 12px; /* Aumento do padding */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        input[name="email"] {
+            margin-top: 25px; /* Aumento da distância entre o título e a caixa de usuário */
+        }
+
+        input[name="password"] {
+            margin-bottom: 25px; /* Aumento da distância entre a caixa de senha e os botões */
+        }
+
+        input::placeholder {
+            color: #888;
+        }
+
+        label {
+            color: white;
+            margin-bottom: 15px;
+            display: block;
+            font-size: 20px; /* Aumento do tamanho da fonte */
+            font-weight: bold;
+        }
+
+        button {
+            padding: 12px 24px; /* Botões um pouco maiores */
+            display: inline-block; /* Centralização horizontal */
+            margin: 5px; /* Espaçamento entre botões */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px; /* Tamanho da fonte dos botões */
+            transition: background-color 0.3s; /* Efeito de transição */
+        }
+
+        #login-button {
+            background-color: red; /* Cor vermelha para o botão de login */
+            color: white;
+        }
+
+        #create-account-button {
+            background-color: blue; /* Cor azul para o botão de criar conta */
+            color: white;
+        }
+
+        /* Efeito hover nos botões */
+        #login-button:hover,
+        #create-account-button:hover {
+            background-color: darkred;
+        }
+        #create-account-button:hover {
+            background-color: rgba(0, 0, 139, 0.993);
+        }
+    </style>
+</head>
+<body>
+
+    <form action="{{ url_for('verificar_usuario') }}" method="post" onsubmit="return entrar()">
+        <label>Faça login para continuar</label>
+        <input type="email" name="email" placeholder="Usuário" />
+        <input type="password" name="password" placeholder="Senha"/>
+        <button type="submit" id="login-button">Logar</button>
+        <button type="button" id="create-account-button" onclick="clicar()">Criar Conta</button>
+    </form>
+
+    <script>
+        function entrar() {
+            var inputEmail = document.querySelector('input[name="email"]');
+            var valorEmail = inputEmail.value;
+
+            var inputPassword = document.querySelector('input[name="password"]');
+            var valorPassword = inputPassword.value;
+
+            if (valorEmail && valorPassword) {
+                return true;
+            } else {
+                alert("Por favor, preencha os campos antes de entrar.");
+            }
+        }
+
+        function clicar() {
+            window.location.href = "http://127.0.0.1:5000/Create";
+        }
+    </script>
+
+</body>
+</html>
