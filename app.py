@@ -149,6 +149,8 @@ def apagar():
 @app.route('/salario', methods=['POST', 'GET'])
 def salario():
 
+    gasto = 0
+
     if request.method == 'POST':
         cpf = request.form['cpf']
         valor = request.form['quantity']
@@ -160,14 +162,48 @@ def salario():
 
             comando2 = "SELECT Nome From pessoa WHERE CPF = %s"
             cur.execute(comando2, cpf)
-            resultado = cur.fetchall()
-            print(resultado)
-            return redirect(url_for('graficos', nome_usuario=resultado[0][0]))
+            resultado1 = cur.fetchall()
+            print(resultado1)
 
+            comando3 = "SELECT	P.Salario, C.Valor FROM	pessoa P, contas C WHERE	CPF = C_cpf and CPF = %s;"
+            cur.execute(comando3, cpf)
+            resultado2 = cur.fetchall()
+
+            for i in range(0, len(resultado2)):
+                gasto = gasto + resultado2[i][1]
+
+            print(resultado1)
+            url = url_for('graficos', nome_usuario=resultado1[0][0], salario=resultado2[0][0], gasto=gasto)
+            return redirect(url)
 #______________________________________________________________________________________________________________________
-@app.route('/usuario/<nome_usuario>/mostrar_tabelas', methods=['GET'])
-def mostrar_tabelas(nome_usuario):
+        
+@app.route('/usuario/<nome_usuario>/salva_salario', methods=['POST'])
+def salva_salario(nome_usuario):
+    result = None
+    print("Teste")
+    print(nome_usuario)
+    dados_tabela = request.json['table']
+    print(dados_tabela)
     
+    with mysql.cursor() as cur:
+        print("Teste2222")
+        cur.execute('Select cpf FROM pessoa WHERE nome = %s', nome_usuario)
+        print("Teste2222")
+        result = cur.fetchone() 
+        print("Teste2222")
+        if result:
+            cpf_do_usuario = result[0]
+            print("CPF")
+            print(cpf_do_usuario)
+            query = f'Update pessoa SET Salario = {dados_tabela} where Cpf = "{cpf_do_usuario}"'
+            cur.execute(query)
+            cur.connection.commit()
+        else:
+            print("Usuário não encontrado.")
+            
+
+@app.route('/usuario/<nome_usuario>/monta_grafico', methods=['GET'])
+def monta_grafico(nome_usuario):
     with mysql.cursor() as cur:
         cur.execute('Select cpf FROM pessoa WHERE nome = %s', nome_usuario)
     result = cur.fetchone()  
@@ -177,9 +213,25 @@ def mostrar_tabelas(nome_usuario):
         print("Usuário não encontrado.")
         
     with mysql.cursor() as cur:
-        cur.execute('Select * FROM contas Where c_cpf = %s', cpf_do_usuario)
+        cur.execute('Select p1.Salario, c2.valor  FROM pessoa p1 Join contas c2 on p1.cpf = c2.c_cpf where c2.c_cpf = %s', cpf_do_usuario)
+        resultado = cur.fetchall()
+         
+    return jsonify(resultado)
+
+#______________________________________________________________________________________________________________________
+@app.route('/usuario/<nome_usuario>/mostrar_tabelas', methods=['GET'])
+def mostrar_tabelas(nome_usuario):
+    with mysql.cursor() as cur:
+        cur.execute('Select cpf FROM pessoa WHERE nome = %s', nome_usuario)
+    result = cur.fetchone()  
+    if result:
+        cpf_do_usuario = result[0]
+    else:
+        print("Usuário não encontrado.")
+        
+    with mysql.cursor() as cur:
+        cur.execute('Select *  FROM Contas where C_cpf = %s', cpf_do_usuario)
         result = cur.fetchall()
-        print(result)
          
     return jsonify(result)
 
@@ -211,7 +263,8 @@ def salvar_tabela(nome_usuario):
     
     with mysql.cursor() as cur:
         cur.execute('Select cpf FROM pessoa WHERE nome = %s', dados_tabela['nome_usuario'])
-    
+        print(dados_tabela['nome_usuario'])
+        print( dados_tabela['conta'])
     result = cur.fetchone()
     if result:
         cpf_do_usuario = result[0]

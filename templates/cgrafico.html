@@ -2,41 +2,305 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento Financeiro - MeuSite</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='grafico.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap" rel="stylesheet">
+    <title>Graficos</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="background-image">
+<body style="background-color: rgb(77, 77, 77);">
+
     <header>
         <div id="div1H"></div>
         <nav>
             <div class="botoes-navbar">
-                <a href="{{ url_for('usuarios', nome_usuario=nome) }}">Início</a>
-                <a href="{{ url_for('sobre_nos') }}">Sobre nós</a>
-                <a href="{{ url_for('sobre_nos') }}#contato">Contato</a>
+                <a href="http://127.0.0.1:5000/usuario/{{nome}}">Início</a>
+                <a href="http://127.0.0.1:5000/Login">Sobre nós</a>
+                <a href="mailto:rafael.couto@aluno.ufop.edu.br">Contato</a>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <div class="form-container">
-            <form id="financeiroForm">
-                <input type="text" name="cpf" placeholder="Digite seu CPF">
-                <input type="number" name="salario" placeholder="Digite seu salário">
-                <input type="number" name="gasto" placeholder="Digite o gasto">
-                <button type="button" onclick="redirecionar();">Entrar</button>
-            </form>
-            <button id="openModalDiv1">Abrir Modal</button>
-            <dialog id="dialog1">
-                <p>Conteúdo do modal</p>
-                <button onclick="document.getElementById('dialog1').close()">Fechar</button>
-            </dialog>
+
+
+
+    <div class="main-container">
+
+
+        <!-- Div que é um butão-->
+        <div class="flex-container3">
+
+            <!-- Div que é um butão de Adicionar Salario-->
+            <div class="flex-container3">
+                <div class="flex-container">
+                    <div id="openModalDiv1" class="background-name">
+
+                        <form action="{{ url_for('salario') }}" method="post" onsubmit="return redirecionar()">
+
+                            <h1 class="frase1">Adicionar elemento</h1>
+                            <dialog id="dialog1" style="width: 400px; padding: 20px; background-color: white; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);">
+
+                                <h1 style="text-align: center"> Adicione seu Salario </h1>
+
+                                <div>
+                                    <input type="text" name="cpf" placeholder="CPF" id="cpfInput"/>
+                                </div>
+
+                                <div>
+                                    <input type="number" name="quantity" min="1" step="1" placeholder="Valor do Salario">
+                                </div>
+
+                                <div style="display: flex; justify-content: center; align-items: center; height: 10vh;">
+                                    <button id="adicionar" style="padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;" type="submit">Adicionar</button>
+                                </div>
+
+                                <div>
+                                    <p style="text-align: center">ESC para Sair</p>
+                                </div>
+
+                            </dialog>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div class="graph-container">
-            <canvas id="myChart"></canvas>
+
+        <div id="grafico">
+
+            <canvas id="myChart" style="width: 30%; height: 50%; background-color: #f2f2f2; display: flex; justify-content: center;"></canvas>
+
         </div>
+
     </div>
-    <script src="{{ url_for('static', filename='grafico.js') }}"></script>
+
+<script>
+
+        function redirecionar() {
+
+            var inputCPF = document.querySelector('input[name="cpf"]');
+            var valorCPF = inputCPF.value;
+
+            var inputValor = document.querySelector('input[name="quantity"]');
+            var valorValor = inputValor.value;
+
+            if (valorValor && valorCPF) {
+                return true;
+            } else {
+                alert("Por favor, preencha os campos antes de entrar.");
+            }
+        }
+
+        const button1 = document.getElementById("openModalDiv1") <!-- Criamos duas variaveis button e modal -->
+        const modal1 = document.getElementById("dialog1");
+
+        button1.onclick = function(){
+            modal1.showModal()
+        }
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const salario = urlParams.get('salario');
+
+        const gasto = urlParams.get('gasto');
+
+
+        function atualizarGrafico(salario, gasto) {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const diferenca = salario - gasto;
+            const categorias = ['Salário', 'Gastos', 'Diferença'];
+            const valores = [salario, gasto, diferenca];
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: categorias,
+                    datasets: [{
+                        label: 'Valores',
+                        data: valores,
+                        backgroundColor: ['blue', 'red', 'green'],
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Resumo Financeiro'
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+        if (salario !== null && gasto !== null) {
+            // Chama a função para atualizar o gráfico com os novos valores
+            atualizarGrafico(parseFloat(salario), parseFloat(gasto));
+        } else {
+            atualizarGrafico(0, 0);
+        }
+
+
+
+</script>
+
 </body>
+
+<style>
+
+
+    input{
+        padding: 10px;
+        border: none;
+        border-bottom: 2px solid #3498db;
+        outline: none;
+        color: #333;
+        font-size: 16px;
+        transition: border-bottom-color 0.3s;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    dialog[open]::backdrop {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    /* CABEÇALHO */
+
+    header {
+        width: 100%;
+        height: 40px;
+        background: #2D2D2D;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;             /* Colocado z-index 1 para o cabeçalho ficar acima da imagem de fundo */
+    }
+
+    .background-image {
+        background-image: url('Imagens/Frame 2.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;            /* Colocado z-index -1 para a imagem de fundo ficar atrás de todos os outros elementos */
+    }
+
+
+    nav {
+        width: 100%;
+        height: 60px;
+        background: #2D2D2D;
+    }
+
+    nav a {
+        margin-right: 50px;
+        font-family: 'Inter', sans-serif;
+        text-decoration: none;
+        color: white;
+        font-size: 28px;
+        font-weight: 400;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    nav a:hover {
+        transform: scale(1.1);              /* Aumenta o tamanho do botão em 10% */
+        color: #FFD700;                     /* Muda a cor do texto para dourado */
+        transition: all 0.3s ease;          /* Transição de 0.3s para todas as propriedades */
+    }
+
+    div#div1H {
+        margin-top: 10px;
+        margin-left: 30px;
+        width: 59px;
+        height: 59px;
+        background: #D9D9D9 url("https://poplembrancinhas.com.br/wp-content/uploads/2020/06/desenho-de-jacare-13.jpg") center/cover;
+        border-radius: 500px;
+        position: absolute;
+    }
+
+    .botoes-navbar{
+        margin-top: 20px;
+        margin-left: 230px;
+    }
+
+
+    /*BOTÕES DA PÁGINA INÍCIO*/
+
+    .box{
+        width: 100px;
+        height: 100px;
+        background: #fff;
+    }
+
+    .flex-container {
+        background-color: #2D2D2D;
+        display: flex;
+        align-items: center;
+        margin-bottom: 50px;
+        margin-left: 80px;
+        margin-right: 100px;
+    }
+
+    .flex-container2 {
+        background-color: #2D2D2D;
+        display: flex;
+        align-items: center;
+        margin-left: 80px;
+        margin-right: 100px;
+    }
+
+    .flex-container3 {
+        margin-top: 70px;
+        /* Removendo margin-left para usar flexbox */
+        display: flex;
+        flex-direction: column;
+        flex: 1;  /* Ocupa todo espaço restante */
+    }
+
+    .frase1{
+        margin:50px;
+        color: white;
+        font-family: Inter;
+        font-weight: 400;
+        font-size: 30px;
+        text-align: center;
+    }
+
+    .frase2{
+        margin:50px;
+        color: white;
+        font-family: Inter;
+        font-weight: 400;
+        font-size: 30px;
+        text-align: center;
+    }
+
+
+    /*EFEITOS*/
+
+    .flex-container, .flex-container2 {
+        cursor: pointer;                                    /* Muda o cursor para uma mãozinha, indicando que é clicável */
+        transition: transform 0.2s, box-shadow 0.2s;        /* Adiciona transição suave ao aplicar efeitos */
+    }
+
+    .flex-container:hover, .flex-container2:hover {
+        transform: scale(1.05);                             /* Aumenta um pouco o tamanho quando passa o mouse */
+        box-shadow: 0 0 60px rgba(0,0,0,0.5);               /* Adiciona uma sombra ao passar o mouse */
+    }
+
+    .flex-container:active, .flex-container2:active {
+        transform: scale(0.98);                             /* Diminui um pouco o tamanho quando clica */
+        box-shadow: 0 0 10px rgba(0,0,0,0.4);               /* Sombra menor ao clicar */
+    }
+
+
+</style>
+
 </html>

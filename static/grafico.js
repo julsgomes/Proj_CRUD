@@ -1,15 +1,5 @@
 var myChart;
 
-function redirecionar() {
-  var inputSalario = document.querySelector('input[name="salario"]').value;
-  var inputGasto = document.querySelector('input[name="gasto"]').value;
-  if (inputSalario && inputGasto) {
-    atualizarGrafico(parseFloat(inputSalario), parseFloat(inputGasto));
-  } else {
-    alert("Por favor, preencha os campos antes de entrar.");
-  }
-}
-
 function atualizarGrafico(salario, gasto) {
   if (myChart) {
     myChart.destroy(); // Destrua o gráfico existente antes de criar um novo
@@ -69,4 +59,48 @@ function atualizarGrafico(salario, gasto) {
     }
   });
 }
+function save_salary(salary) {
+  let nomeUsuario = window.location.pathname.split('/')[2];
+  fetch(`/usuario/${nomeUsuario}/salva_salario`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({"table" : salary})
+  });
+}
 
+function redirecionar() {
+  var inputSalario = document.querySelector('input[name="salario"]').value;
+  //var inputGasto = document.querySelector('input[name="gasto"]').value;
+  save_salary(inputSalario);
+  if (inputSalario) {
+    show_tables();
+  } else {
+    alert("Por favor, preencha os campos antes de entrar.");
+  }
+}
+
+function show_tables() {
+  let nomeUsuario = window.location.pathname.split('/')[2];
+  fetch(`/usuario/${nomeUsuario}/mostrar_tabelas`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  })
+  .then(response => response.json())
+  .then(results => {
+      let soma_gasto = 0;
+      results.forEach(result => {
+        console.log(result);
+          salario = result[0];
+          soma_gasto += result[1];
+      });
+      console.log(`Soma dos gastos: ${soma_gasto}`);
+      atualizarGrafico(salario, soma_gasto);
+  })
+  .catch(error => {
+      console.error('Erro ao buscar tabelas:', error);
+  });
+}
